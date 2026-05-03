@@ -73,8 +73,7 @@ window.procesarDescarga = async function(id, urlVideo) {
             },
             body: JSON.stringify({
                 url: urlVideo,
-                vQuality: "720",      // En V10 es 'vQuality', no 'videoQuality'
-                filenameStyle: "basic"
+                videoQuality: "720"
             })
         });
 
