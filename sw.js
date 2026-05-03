@@ -22,14 +22,17 @@ const ASSETS = [
   './manifest.json'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Instalando caché...');
-        return cache.addAll(ASSETS);
-      })
-      .catch(err => console.error('Fallo en cache.addAll:', err))
+// En tu sw.js
+self.addEventListener('install', event => {
+  console.log('Instalando caché...');
+  event.waitUntil(
+    caches.open('vaultstream-v1').then(cache => {
+      return Promise.allSettled(
+        ASSETS_TO_CACHE.map(url => {
+          return cache.add(url).catch(err => console.error(`Falló al cargar: ${url}`, err));
+        })
+      );
+    })
   );
 });
 
