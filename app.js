@@ -73,10 +73,10 @@ window.procesarDescarga = async function(id, urlVideo) {
         "Accept": "application/json"
     },
     body: JSON.stringify({
-                url: urlVideo,
-                videoQuality: "720", // Usar el nombre largo es más estable
-                filenameStyle: "basic"
-            })
+        url: urlVideo,
+        videoQuality: "720", // Usar el nombre completo es más seguro en V10
+        filenameStyle: "basic"
+    })
 });
         const data = await response.json();
         
