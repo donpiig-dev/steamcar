@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultStream - Mi Nube SD</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding-bottom: 80px; /* Espacio para la barra inferior */
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Formulario de entrada */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        input[type="url"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        button.btn-add {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Lista de Videos */
+        .video-card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .video-info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .actions {
+            display: flex;
+            justify-content:间-between;
+            gap: 10px;
+        }
+
+        .btn-download {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            flex: 1;
+        }
+
+        /* Reproductor oculto inicialmente */
+        #player-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+        }
+
+        .close-player {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            z-index: 1001;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>VaultStream</h1>
+    </header>
+
+    <div class="container">
+        <div class="input-group">
+            <input type="url" id="videoUrl" placeholder="Pega el link de video aquí...">
+            <button class="btn-add" onclick="agregarALista()">Añadir</button>
+        </div>
+
+        <div id="videoList">
+            <div class="video-card">
+                <div class="video-info">
+                    <h3>Título del Video</h3>
+                    <small>YouTube - Pendiente de descarga</small>
+                </div>
+                <div class="actions">
+                    <button class="btn-download" onclick="iniciarDescarga('URL_AQUI')">Bajar a SD</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="player-container">
+        <button class="close-player" onclick="cerrarReproductor()">✕</button>
+        <video id="player" playsinline controls></video>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
