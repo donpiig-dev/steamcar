@@ -72,11 +72,16 @@ window.procesarDescarga = async function(id, urlVideo) {
         "Content-Type": "application/json",
         "Accept": "application/json"
     },
-    body: JSON.stringify({
-        url: urlVideo,
-        videoQuality: "720", // Usar el nombre completo es más seguro en V10
-        filenameStyle: "basic"
-    })
+    // body: JSON.stringify({
+    //     url: urlVideo,
+    //     videoQuality: "720", // Usar el nombre completo es más seguro en V10
+    //     filenameStyle: "basic"
+    // })
+          body: JSON.stringify({
+    url: urlVideo,
+    videoQuality: "720",
+    youtubeVideoCodec: "h264" // Esto hace que YouTube entregue el video más fácil
+})
 });
         const data = await response.json();
         
