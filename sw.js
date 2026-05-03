@@ -1,3 +1,11 @@
+self.addEventListener('fetch', event => {
+  // Si la petición es para el CDN de Plyr, deja que pase normal
+  if (event.request.url.includes('plyr.io') || event.request.url.includes('cdnjs.cloudflare.com')) {
+    return; 
+  }
+  
+  // Tu lógica actual de event.respondWith...
+});
 // Dentro de tu sw.js
 const PRECACHE_ASSETS = [
   '/',
