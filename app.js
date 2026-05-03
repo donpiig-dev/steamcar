@@ -67,13 +67,14 @@ window.procesarDescarga = async function(id, urlVideo) {
     try {
       const response = await fetch(COBALT_API, {
     method: "POST",
+    mode: "cors", // Forzamos el modo CORS explícitamente
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
     },
     body: JSON.stringify({
         url: urlVideo,
-        vQuality: "720" // La V10 prefiere vQuality
+        vQuality: "720"
     })
 });
         const data = await response.json();
