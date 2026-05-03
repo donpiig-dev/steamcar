@@ -168,3 +168,11 @@ function cerrarReproductor() {
     document.getElementById('player-container').style.display = 'none';
     player.stop();
 }
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('✅ Service Worker activo en:', reg.scope))
+      .catch(err => console.error('❌ Error al registrar SW:', err));
+  });
+}
