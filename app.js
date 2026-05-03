@@ -1,11 +1,3 @@
-window.onload = () => {
-  if (typeof Plyr !== 'undefined') {
-    const player = new Plyr('#player');
-    console.log("Plyr cargado correctamente");
-  } else {
-    console.error("Error: La librería Plyr no se pudo cargar desde el CDN.");
-  }
-};
 // 1. REGISTRO DEL SERVICE WORKER
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
