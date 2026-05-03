@@ -126,4 +126,4 @@ window.cerrarReproductor = function() {
 };
     document.getElementById('player-container').style.display = 'none';
     if (player) player.stop();
-}
+
