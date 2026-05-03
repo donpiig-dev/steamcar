@@ -63,20 +63,29 @@ function renderizarLista() {
 }
 
 // 4. LÓGICA DE DESCARGA A SD
-const response = await fetch(COBALT_API, {
-    method: "POST",
-    headers: { 
-        "Content-Type": "application/json", 
-        "Accept": "application/json" 
-    },
-    body: JSON.stringify({ 
-        url: urlVideo, 
-        vQuality: "720",
-        filenameStyle: "basic" // Añade esto para mayor compatibilidad
-    })
-});
+// 4. LÓGICA DE DESCARGA A SD
+window.procesarDescarga = async function(id, urlVideo) {
+    try {
+        const response = await fetch(COBALT_API, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                url: urlVideo,
+                vQuality: "720",
+                filenameStyle: "basic"
+            })
+        });
+
         const data = await response.json();
-        if (!data.url) throw new Error("No se obtuvo URL");
+        
+        // Si la API devuelve un error o no trae tú URL, lanzamos el error
+        if (!data || !data.url) {
+            console.error("Respuesta de la API:", data);
+            throw new Error("La API de Cobalt no devolvió una URL de descarga.");
+        }
 
         const videoRes = await fetch(data.url);
         const videoBlob = await videoRes.blob();
@@ -84,7 +93,10 @@ const response = await fetch(COBALT_API, {
         // Selector de archivos para la SD
         const handle = await window.showSaveFilePicker({
             suggestedName: `video_${id}.mp4`,
-            types: [{ description: 'Video MP4', accept: {'video/mp4': ['.mp4']} }]
+            types: [{
+                description: 'Video MP4',
+                accept: {'video/mp4': ['.mp4']}
+            }]
         });
 
         const writable = await handle.createWritable();
@@ -100,12 +112,12 @@ const response = await fetch(COBALT_API, {
         };
         tx.oncomplete = renderizarLista;
         alert("¡Guardado en la SD!");
+
     } catch (err) {
-        console.error(err);
-        alert("Error al descargar.");
+        console.error("Error detallado:", err);
+        alert("Error al descargar: " + err.message);
     }
 };
-
 // Variable global para el reproductor
 let player;
 
