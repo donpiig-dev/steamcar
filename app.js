@@ -8,7 +8,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // 2. CONFIGURACIÓN DE APIS Y DB
-const COBALT_API = "https://cobalt-api-production-2724.up.railway.app/";
+const COBALT_API = "https://cobalt-api-production-2724.up.railway.app/api/json";
 let db;
 
 const request = indexedDB.open("VaultStreamDB", 1);
@@ -66,17 +66,16 @@ function renderizarLista() {
 window.procesarDescarga = async function(id, urlVideo) {
     try {
       const response = await fetch(COBALT_API, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                url: urlVideo,
-                videoQuality: "720"
-            })
-        });
-
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    },
+    body: JSON.stringify({
+        url: urlVideo,
+        vQuality: "720" // La V10 prefiere vQuality
+    })
+});
         const data = await response.json();
         
         // Verificamos qué nos devolvió la API en la consola para estar seguros
