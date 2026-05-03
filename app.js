@@ -8,7 +8,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // 2. CONFIGURACIÓN DE APIS Y DB
-const COBALT_API = "https://cobalt-api-production-2724.up.railway.app/api/json";
+const COBALT_API = "https://cobalt-api-production-2724.up.railway.app";
 let db;
 
 const request = indexedDB.open("VaultStreamDB", 1);
