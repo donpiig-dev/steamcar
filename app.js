@@ -72,11 +72,12 @@ window.procesarDescarga = async function(id, urlVideo) {
         "Accept": "application/json"
     },
     body: JSON.stringify({
-        url: urlVideo,
-        videoQuality: "720", // Cobalt usa 'videoQuality', no 'vQuality'
-        filenameStyle: "basic",
-        downloadMode: "auto" // Ayuda a que la API decida mejor el túnel
-    })
+    url: urlVideo,
+    videoQuality: "720",     // Asegúrate de que sea un string
+    filenameStyle: "basic",
+    downloadMode: "auto",    // Ayuda a la API a procesar el túnel
+    isAudioOnly: false       // Parámetro explícito para evitar confusiones
+})
 });
 
         const data = await response.json();
