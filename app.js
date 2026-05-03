@@ -102,8 +102,19 @@ async function procesarDescarga(id, urlVideo) {
     }
 }
 
-const player = new Plyr('#player');
-function cerrarReproductor() {
+// Variable global para el reproductor
+let player;
+
+// Esperar a que el DOM y las librerías carguen
+window.addEventListener('DOMContentLoaded', () => {
+    if (typeof Plyr !== 'undefined') {
+        player = new Plyr('#player');
+    } else {
+        console.error("Plyr no se cargó correctamente");
+    }
+});
+
+export function cerrarReproductor() {
     document.getElementById('player-container').style.display = 'none';
-    player.stop();
+    if (player) player.stop();
 }
