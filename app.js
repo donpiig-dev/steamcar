@@ -105,7 +105,6 @@ async function procesarDescarga(id, urlVideo) {
 // Variable global para el reproductor
 let player;
 
-// Usamos 'load' en lugar de 'DOMContentLoaded' para asegurar que el CDN de Plyr esté listo
 window.addEventListener('load', () => {
     try {
         if (typeof Plyr !== 'undefined') {
@@ -119,11 +118,8 @@ window.addEventListener('load', () => {
     }
 });
 
-// Cambiamos a window.cerrarReproductor para que sea accesible desde el HTML
 window.cerrarReproductor = function() {
-    document.getElementById('player-container').style.display = 'none';
+    const container = document.getElementById('player-container');
+    if (container) container.style.display = 'none';
     if (player) player.stop();
 };
-    document.getElementById('player-container').style.display = 'none';
-    if (player) player.stop();
-
