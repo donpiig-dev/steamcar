@@ -1,43 +1,50 @@
-self.addEventListener('fetch', event => {
-  // Si la petición es para el CDN de Plyr, deja que pase normal
-  if (event.request.url.includes('plyr.io') || event.request.url.includes('cdnjs.cloudflare.com')) {
-    return; 
-  }
-  
-  // Tu lógica actual de event.respondWith...
-});
-// Dentro de tu sw.js
-const PRECACHE_ASSETS = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  'https://cdn.plyr.io/3.7.8/plyr.js', // Agrega esto
-  'https://cdn.plyr.io/3.7.8/plyr.css'  // Agrega esto
-];
-const CACHE_NAME = 'vaultstream-v2'; // Cambiamos el nombre para forzar actualización
-const ASSETS = [
+const CACHE_NAME = 'vaultstream-v3';
+
+// SOLO archivos que existen realmente en tu repositorio raíz
+const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './app.js',
   './manifest.json'
 ];
 
-// En tu sw.js
+// Instalación
 self.addEventListener('install', event => {
-  console.log('Instalando caché...');
+  console.log('Instalando Service Worker...');
   event.waitUntil(
-    caches.open('vaultstream-v1').then(cache => {
+    caches.open(CACHE_NAME).then(cache => {
+      // Usamos map para que si uno falla, los demás se guarden
       return Promise.allSettled(
         ASSETS_TO_CACHE.map(url => {
-          return cache.add(url).catch(err => console.error(`Falló al cargar: ${url}`, err));
+          return cache.add(url).catch(err => console.error('Fallo al cargar:', url, err));
         })
+      );
+    })
+  );
+  self.skipWaiting();
+});
+
+// Activación (Limpieza de cachés viejas)
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
       );
     })
   );
 });
 
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
+// Respuesta a peticiones
+self.addEventListener('fetch', event => {
+  // No cachear llamadas a la API de Cobalt ni CDNs externos aquí para evitar errores de CORS
+  if (event.request.url.includes('railway.app') || event.request.url.includes('plyr.io')) {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
   );
 });
