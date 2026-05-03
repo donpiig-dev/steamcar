@@ -29,8 +29,8 @@ request.onsuccess = (e) => {
     renderizarLista();
 };
 
-// 3. FUNCIONES DE INTERFAZ
-async function agregarALista() {
+// Antes: async function agregarALista() { ... }
+window.agregarALista = async function() {
     const urlInput = document.getElementById('videoUrl');
     if (!urlInput.value) return;
 
@@ -45,7 +45,7 @@ async function agregarALista() {
     transaction.objectStore("videos").add(nuevoVideo);
     urlInput.value = "";
     transaction.oncomplete = renderizarLista;
-}
+};
 
 function renderizarLista() {
     const listElement = document.getElementById('videoList');
@@ -71,7 +71,7 @@ function renderizarLista() {
 }
 
 // 4. LÓGICA DE DESCARGA A SD
-async function procesarDescarga(id, urlVideo) {
+window.procesarDescarga = async function(id, urlVideo) {
     try {
         const response = await fetch(COBALT_API, {
             method: "POST",
@@ -106,9 +106,9 @@ async function procesarDescarga(id, urlVideo) {
         alert("¡Guardado en la SD!");
     } catch (err) {
         console.error(err);
-        alert("Error al descargar. Asegúrate de estar usando Chrome/Edge.");
+        alert("Error al descargar.");
     }
-}
+};
 
 // Variable global para el reproductor
 let player;
