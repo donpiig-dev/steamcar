@@ -105,16 +105,25 @@ async function procesarDescarga(id, urlVideo) {
 // Variable global para el reproductor
 let player;
 
-// Esperar a que el DOM y las librerías carguen
-window.addEventListener('DOMContentLoaded', () => {
-    if (typeof Plyr !== 'undefined') {
-        player = new Plyr('#player');
-    } else {
-        console.error("Plyr no se cargó correctamente");
+// Usamos 'load' en lugar de 'DOMContentLoaded' para asegurar que el CDN de Plyr esté listo
+window.addEventListener('load', () => {
+    try {
+        if (typeof Plyr !== 'undefined') {
+            player = new Plyr('#player');
+            console.log("✅ Plyr inicializado correctamente");
+        } else {
+            console.error("❌ Plyr no se encontró en el objeto window");
+        }
+    } catch (error) {
+        console.error("❌ Error al inicializar Plyr:", error);
     }
 });
 
-export function cerrarReproductor() {
+// Cambiamos a window.cerrarReproductor para que sea accesible desde el HTML
+window.cerrarReproductor = function() {
+    document.getElementById('player-container').style.display = 'none';
+    if (player) player.stop();
+};
     document.getElementById('player-container').style.display = 'none';
     if (player) player.stop();
 }
