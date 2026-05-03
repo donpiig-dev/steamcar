@@ -63,14 +63,18 @@ function renderizarLista() {
 }
 
 // 4. LÓGICA DE DESCARGA A SD
-window.procesarDescarga = async function(id, urlVideo) {
-    try {
-        const response = await fetch(COBALT_API, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Accept": "application/json" },
-            body: JSON.stringify({ url: urlVideo, vQuality: "720" })
-        });
-
+const response = await fetch(COBALT_API, {
+    method: "POST",
+    headers: { 
+        "Content-Type": "application/json", 
+        "Accept": "application/json" 
+    },
+    body: JSON.stringify({ 
+        url: urlVideo, 
+        vQuality: "720",
+        filenameStyle: "basic" // Añade esto para mayor compatibilidad
+    })
+});
         const data = await response.json();
         if (!data.url) throw new Error("No se obtuvo URL");
 
