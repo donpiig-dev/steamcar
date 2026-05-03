@@ -1,3 +1,11 @@
+// Dentro de tu sw.js
+const PRECACHE_ASSETS = [
+  '/',
+  '/index.html',
+  '/css/styles.css',
+  'https://cdn.plyr.io/3.7.8/plyr.js', // Agrega esto
+  'https://cdn.plyr.io/3.7.8/plyr.css'  // Agrega esto
+];
 const CACHE_NAME = 'vaultstream-v2'; // Cambiamos el nombre para forzar actualización
 const ASSETS = [
   './',
