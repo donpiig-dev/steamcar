@@ -72,10 +72,11 @@ window.procesarDescarga = async function(id, urlVideo) {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({
-                url: urlVideo,
-                vQuality: "720",
-                filenameStyle: "basic"
+           body: JSON.stringify({
+            url: urlVideo,
+            vQuality: "720",
+            filenameStyle: "basic",
+            isAudioOnly: false
             })
         });
 
