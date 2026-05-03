@@ -63,7 +63,6 @@ function renderizarLista() {
 }
 
 // 4. LÓGICA DE DESCARGA A SD
-// 4. LÓGICA DE DESCARGA A SD
 window.procesarDescarga = async function(id, urlVideo) {
     try {
         const response = await fetch(COBALT_API, {
@@ -72,26 +71,27 @@ window.procesarDescarga = async function(id, urlVideo) {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-           body: JSON.stringify({
-            url: urlVideo,
-            vQuality: "720",
-            filenameStyle: "basic",
-            isAudioOnly: false
+            body: JSON.stringify({
+                url: urlVideo,
+                vQuality: "720",
+                filenameStyle: "basic"
             })
         });
 
         const data = await response.json();
         
-        // Si la API devuelve un error o no trae tú URL, lanzamos el error
-        if (!data || !data.url) {
-            console.error("Respuesta de la API:", data);
-            throw new Error("La API de Cobalt no devolvió una URL de descarga.");
+        // Verificamos qué nos devolvió la API en la consola para estar seguros
+        console.log("Respuesta de la API:", data);
+
+        // Si la API devuelve un estado de error
+        if (data.status === 'error' || (!data.url && data.status !== 'redirect')) {
+            throw new Error(data.text || "La API no devolvió un enlace válido.");
         }
 
-        const videoRes = await fetch(data.url);
+        const downloadUrl = data.url;
+        const videoRes = await fetch(downloadUrl);
         const videoBlob = await videoRes.blob();
 
-        // Selector de archivos para la SD
         const handle = await window.showSaveFilePicker({
             suggestedName: `video_${id}.mp4`,
             types: [{
@@ -104,19 +104,22 @@ window.procesarDescarga = async function(id, urlVideo) {
         await writable.write(videoBlob);
         await writable.close();
 
+        // Actualizar estado en la base de datos
         const tx = db.transaction(["videos"], "readwrite");
         const store = tx.objectStore("videos");
         store.get(id).onsuccess = (e) => {
             const videoData = e.target.result;
-            videoData.estado = "descargado";
-            store.put(videoData);
+            if (videoData) {
+                videoData.estado = "descargado";
+                store.put(videoData);
+            }
         };
         tx.oncomplete = renderizarLista;
-        alert("¡Guardado en la SD!");
+        alert("¡Guardado exitosamente en la SD!");
 
     } catch (err) {
         console.error("Error detallado:", err);
-        alert("Error al descargar: " + err.message);
+        alert("Error: " + err.message);
     }
 };
 // Variable global para el reproductor
